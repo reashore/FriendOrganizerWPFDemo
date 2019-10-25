@@ -12,8 +12,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-using System.Data.Entity.Infrastructure;
 
 namespace FriendOrganizer.UI.ViewModel
 {

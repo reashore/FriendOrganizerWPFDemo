@@ -1,6 +1,5 @@
 ﻿using Prism.Commands;
 using System.Windows.Input;
-using System;
 using FriendOrganizer.UI.Event;
 using Prism.Events;
 

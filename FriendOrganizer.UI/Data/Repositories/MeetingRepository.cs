@@ -3,7 +3,6 @@ using FriendOrganizer.DataAccess;
 using FriendOrganizer.Model;
 using System.Data.Entity;
 using System.Collections.Generic;
-using System;
 using System.Linq;
 
 namespace FriendOrganizer.UI.Data.Repositories
