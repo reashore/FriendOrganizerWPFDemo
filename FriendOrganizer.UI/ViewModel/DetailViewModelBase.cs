@@ -137,9 +137,9 @@ namespace FriendOrganizer.UI.ViewModel
                     return;
                 }
 
-                MessageDialogResult result = await MessageDialogService.ShowOkCancelDialogAsync("The entity has been changed in "
-                 + "the meantime by someone else. Click OK to save your changes anyway, click Cancel "
-                 + "to reload the entity from the database.", "Question");
+                const string message = "The entity has been changed in the meantime by someone else. Click OK to save your changes anyway, click Cancel ";
+                const string title = "Question";
+                MessageDialogResult result = await MessageDialogService.ShowOkCancelDialogAsync(message, title);
 
                 if (result == MessageDialogResult.OK)
                 {

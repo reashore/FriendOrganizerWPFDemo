@@ -31,8 +31,7 @@ namespace FriendOrganizer.UI.ViewModel
             _friendRepository = friendRepository;
             _programmingLanguageLookupDataService = programmingLanguageLookupDataService;
 
-            eventAggregator.GetEvent<AfterCollectionSavedEvent>()
-             .Subscribe(AfterCollectionSaved);
+            eventAggregator.GetEvent<AfterCollectionSavedEvent>().Subscribe(AfterCollectionSaved);
 
             AddPhoneNumberCommand = new DelegateCommand(OnAddPhoneNumberExecute);
             RemovePhoneNumberCommand = new DelegateCommand(OnRemovePhoneNumberExecute, OnRemovePhoneNumberCanExecute);
