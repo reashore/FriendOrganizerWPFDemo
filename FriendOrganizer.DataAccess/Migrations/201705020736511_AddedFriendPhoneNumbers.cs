@@ -10,12 +10,12 @@ namespace FriendOrganizer.DataAccess.Migrations
                 "dbo.FriendPhoneNumber",
                 c => new
                     {
-                        Id = c.Int(nullable: false, identity: true),
-                        Number = c.String(nullable: false),
-                        FriendId = c.Int(nullable: false),
+                        Id = c.Int(false, true),
+                        Number = c.String(false),
+                        FriendId = c.Int(false)
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Friend", t => t.FriendId, cascadeDelete: true)
+                .ForeignKey("dbo.Friend", t => t.FriendId, true)
                 .Index(t => t.FriendId);
         }
         

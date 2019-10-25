@@ -10,10 +10,10 @@ namespace FriendOrganizer.DataAccess.Migrations
                 "dbo.Friend",
                 c => new
                     {
-                        Id = c.Int(nullable: false, identity: true),
-                        FirstName = c.String(nullable: false, maxLength: 50),
+                        Id = c.Int(false, true),
+                        FirstName = c.String(false, 50),
                         LastName = c.String(maxLength: 50),
-                        Email = c.String(maxLength: 50),
+                        Email = c.String(maxLength: 50)
                     })
                 .PrimaryKey(t => t.Id);
         }

@@ -10,10 +10,10 @@ namespace FriendOrganizer.DataAccess.Migrations
                 "dbo.Meeting",
                 c => new
                     {
-                        Id = c.Int(nullable: false, identity: true),
-                        Title = c.String(nullable: false, maxLength: 50),
-                        DateFrom = c.DateTime(nullable: false),
-                        DateTo = c.DateTime(nullable: false),
+                        Id = c.Int(false, true),
+                        Title = c.String(false, 50),
+                        DateFrom = c.DateTime(false),
+                        DateTo = c.DateTime(false)
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -21,12 +21,12 @@ namespace FriendOrganizer.DataAccess.Migrations
                 "dbo.MeetingFriend",
                 c => new
                     {
-                        Meeting_Id = c.Int(nullable: false),
-                        Friend_Id = c.Int(nullable: false),
+                        Meeting_Id = c.Int(false),
+                        Friend_Id = c.Int(false)
                     })
                 .PrimaryKey(t => new { t.Meeting_Id, t.Friend_Id })
-                .ForeignKey("dbo.Meeting", t => t.Meeting_Id, cascadeDelete: true)
-                .ForeignKey("dbo.Friend", t => t.Friend_Id, cascadeDelete: true)
+                .ForeignKey("dbo.Meeting", t => t.Meeting_Id, true)
+                .ForeignKey("dbo.Friend", t => t.Friend_Id, true)
                 .Index(t => t.Meeting_Id)
                 .Index(t => t.Friend_Id);
         }

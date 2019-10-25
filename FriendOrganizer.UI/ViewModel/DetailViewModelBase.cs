@@ -18,8 +18,7 @@ namespace FriendOrganizer.UI.ViewModel
         private int _id;
         private string _title;
 
-        public DetailViewModelBase(IEventAggregator eventAggregator,
-          IMessageDialogService messageDialogService)
+        protected DetailViewModelBase(IEventAggregator eventAggregator, IMessageDialogService messageDialogService)
         {
             EventAggregator = eventAggregator;
             MessageDialogService = messageDialogService;
@@ -38,13 +37,13 @@ namespace FriendOrganizer.UI.ViewModel
 
         public int Id
         {
-            get { return _id; }
-            protected set { _id = value; }
+            get => _id;
+            protected set => _id = value;
         }
 
         public string Title
         {
-            get { return _title; }
+            get => _title;
             protected set
             {
                 _title = value;
@@ -54,7 +53,7 @@ namespace FriendOrganizer.UI.ViewModel
 
         public bool HasChanges
         {
-            get { return _hasChanges; }
+            get => _hasChanges;
             set
             {
                 if (_hasChanges != value)

@@ -65,22 +65,27 @@ namespace FriendOrganizer.UI.ViewModel
                 {
                     HasChanges = _friendRepository.HasChanges();
                 }
+
                 if (e.PropertyName == nameof(Friend.HasErrors))
                 {
                     ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
                 }
+
                 if (e.PropertyName == nameof(Friend.FirstName) || e.PropertyName == nameof(Friend.LastName))
                 {
                     SetTitle();
                 }
 
             };
+
             ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+
             if (Friend.Id == 0)
             {
                 // trick to trigger validation
                 Friend.FirstName = "";
             }
+
             SetTitle();
         }
 

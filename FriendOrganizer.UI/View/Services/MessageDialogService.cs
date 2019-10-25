@@ -7,7 +7,7 @@ namespace FriendOrganizer.UI.View.Services
 {
     public class MessageDialogService : IMessageDialogService
     {
-        private MetroWindow MetroWindow => (MetroWindow)Application.Current.MainWindow;
+        private static MetroWindow MetroWindow => (MetroWindow)Application.Current.MainWindow;
 
         public async Task<MessageDialogResult> ShowOkCancelDialogAsync(string text, string title)
         {
