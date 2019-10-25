@@ -93,7 +93,7 @@ namespace FriendOrganizer.UI.ViewModel
             Title = $"{Friend.FirstName} {Friend.LastName}";
         }
 
-        private void InitializeFriendPhoneNumbers(ICollection<FriendPhoneNumber> phoneNumbers)
+        private void InitializeFriendPhoneNumbers(IEnumerable<FriendPhoneNumber> phoneNumbers)
         {
             foreach (FriendPhoneNumberWrapper wrapper in PhoneNumbers)
             {
