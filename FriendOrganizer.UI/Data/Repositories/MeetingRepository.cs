@@ -3,6 +3,7 @@ using FriendOrganizer.DataAccess;
 using FriendOrganizer.Model;
 using System.Data.Entity;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 
 namespace FriendOrganizer.UI.Data.Repositories
@@ -14,7 +15,7 @@ namespace FriendOrganizer.UI.Data.Repositories
     {
     }
 
-    public async override Task<Meeting> GetByIdAsync(int id)
+    public override async Task<Meeting> GetByIdAsync(int id)
     {
       return await Context.Meetings
         .Include(m => m.Friends)
@@ -29,7 +30,7 @@ namespace FriendOrganizer.UI.Data.Repositories
 
     public async Task ReloadFriendAsync(int friendId)
     {
-      var dbEntityEntry = Context.ChangeTracker.Entries<Friend>()
+      DbEntityEntry<Friend> dbEntityEntry = Context.ChangeTracker.Entries<Friend>()
         .SingleOrDefault(db => db.Entity.Id == friendId);
       if(dbEntityEntry!=null)
       {

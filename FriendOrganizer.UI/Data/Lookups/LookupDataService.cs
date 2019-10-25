@@ -53,7 +53,7 @@ namespace FriendOrganizer.UI.Data.Lookups
     {
       using (var ctx = _contextCreator())
       {
-        var items = await ctx.Meetings.AsNoTracking()
+        List<LookupItem> items = await ctx.Meetings.AsNoTracking()
           .Select(m =>
              new LookupItem
              {

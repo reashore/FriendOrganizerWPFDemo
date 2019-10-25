@@ -91,7 +91,7 @@ namespace FriendOrganizer.UI.ViewModel
       SetupPicklist();
     }
 
-    protected async override void OnDeleteExecute()
+    protected override async void OnDeleteExecute()
     {
       var result = await MessageDialogService.ShowOkCancelDialogAsync($"Do you really want to delete the meeting {Meeting.Title}?", "Question");
       if (result == MessageDialogResult.OK)
@@ -117,9 +117,9 @@ namespace FriendOrganizer.UI.ViewModel
 
     private void SetupPicklist()
     {
-      var meetingFriendIds = Meeting.Model.Friends.Select(f => f.Id).ToList();
-      var addedFriends = _allFriends.Where(f => meetingFriendIds.Contains(f.Id)).OrderBy(f => f.FirstName);
-      var availableFriends = _allFriends.Except(addedFriends).OrderBy(f => f.FirstName);
+      List<int> meetingFriendIds = Meeting.Model.Friends.Select(f => f.Id).ToList();
+      IOrderedEnumerable<Friend> addedFriends = _allFriends.Where(f => meetingFriendIds.Contains(f.Id)).OrderBy(f => f.FirstName);
+      IOrderedEnumerable<Friend> availableFriends = _allFriends.Except(addedFriends).OrderBy(f => f.FirstName);
 
       AddedFriends.Clear();
       AvailableFriends.Clear();

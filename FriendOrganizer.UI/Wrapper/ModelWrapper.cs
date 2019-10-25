@@ -37,7 +37,7 @@ namespace FriendOrganizer.UI.Wrapper
 
     private void ValidateDataAnnotations(string propertyName, object currentValue)
     {
-      var results = new List<ValidationResult>();
+      List<ValidationResult> results = new List<ValidationResult>();
       var context = new ValidationContext(Model) { MemberName = propertyName };
       Validator.TryValidateProperty(currentValue, context, results);
 
@@ -49,7 +49,7 @@ namespace FriendOrganizer.UI.Wrapper
 
     private void ValidateCustomErrors(string propertyName)
     {
-      var errors = ValidateProperty(propertyName);
+      IEnumerable<string> errors = ValidateProperty(propertyName);
       if (errors != null)
       {
         foreach (var error in errors)

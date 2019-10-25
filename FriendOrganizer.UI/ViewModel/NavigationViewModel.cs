@@ -1,8 +1,10 @@
-﻿using FriendOrganizer.UI.Event;
+﻿using System.Collections.Generic;
+using FriendOrganizer.UI.Event;
 using Prism.Events;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Linq;
+using FriendOrganizer.Model;
 using FriendOrganizer.UI.Data.Lookups;
 
 namespace FriendOrganizer.UI.ViewModel
@@ -28,7 +30,7 @@ namespace FriendOrganizer.UI.ViewModel
 
     public async Task LoadAsync()
     {
-      var lookup = await _friendLookupService.GetFriendLookupAsync();
+      IEnumerable<LookupItem> lookup = await _friendLookupService.GetFriendLookupAsync();
       Friends.Clear();
       foreach (var item in lookup)
       {

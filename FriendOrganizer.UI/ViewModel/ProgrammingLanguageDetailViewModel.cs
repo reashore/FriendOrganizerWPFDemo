@@ -5,6 +5,7 @@ using FriendOrganizer.UI.Wrapper;
 using Prism.Commands;
 using Prism.Events;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace FriendOrganizer.UI.ViewModel
       RemoveCommand = new DelegateCommand(OnRemoveExecute, OnRemoveCanExecute);
     }
 
-    public async override Task LoadAsync(int id)
+    public override async Task LoadAsync(int id)
     {
       Id = id;
 
@@ -41,7 +42,7 @@ namespace FriendOrganizer.UI.ViewModel
 
       ProgrammingLanguages.Clear();
 
-      var languages = await _programmingLanguageRepository.GetAllAsync();
+      IEnumerable<ProgrammingLanguage> languages = await _programmingLanguageRepository.GetAllAsync();
 
       foreach (var model in languages)
       {
@@ -71,7 +72,7 @@ namespace FriendOrganizer.UI.ViewModel
 
     public ProgrammingLanguageWrapper SelectedProgrammingLanguage
     {
-      get { return _selectedProgrammingLanguage; }
+      get => _selectedProgrammingLanguage;
       set
       {
         _selectedProgrammingLanguage = value;
@@ -90,7 +91,7 @@ namespace FriendOrganizer.UI.ViewModel
       return HasChanges && ProgrammingLanguages.All(p => !p.HasErrors);
     }
 
-    protected async override void OnSaveExecute()
+    protected override async void OnSaveExecute()
     {
       try
       {

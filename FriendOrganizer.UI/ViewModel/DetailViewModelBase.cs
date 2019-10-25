@@ -101,7 +101,7 @@ namespace FriendOrganizer.UI.ViewModel
         });
     }
 
-    protected async virtual void OnCloseDetailViewExecute()
+    protected virtual async void OnCloseDetailViewExecute()
     {
       if (HasChanges)
       {
