@@ -11,128 +11,125 @@ using System.Windows.Input;
 
 namespace FriendOrganizer.UI.ViewModel
 {
-  public class MainViewModel : ViewModelBase
-  {
-    private IEventAggregator _eventAggregator;
-    private IDetailViewModel _selectedDetailViewModel;
-    private IMessageDialogService _messageDialogService;
-    private IIndex<string, IDetailViewModel> _detailViewModelCreator;
-
-    public MainViewModel(INavigationViewModel navigationViewModel,
-      IIndex<string, IDetailViewModel> detailViewModelCreator,
-      IEventAggregator eventAggregator,
-      IMessageDialogService messageDialogService)
+    public class MainViewModel : ViewModelBase
     {
-      _eventAggregator = eventAggregator;
-      _detailViewModelCreator = detailViewModelCreator;
-      _messageDialogService = messageDialogService;
+        private IDetailViewModel _selectedDetailViewModel;
+        private readonly IMessageDialogService _messageDialogService;
+        private readonly IIndex<string, IDetailViewModel> _detailViewModelCreator;
 
-      DetailViewModels = new ObservableCollection<IDetailViewModel>();
-
-      _eventAggregator.GetEvent<OpenDetailViewEvent>()
-       .Subscribe(OnOpenDetailView);
-      _eventAggregator.GetEvent<AfterDetailDeletedEvent>()
-        .Subscribe(AfterDetailDeleted);
-      _eventAggregator.GetEvent<AfterDetailClosedEvent>()
-        .Subscribe(AfterDetailClosed);
-
-      CreateNewDetailCommand = new DelegateCommand<Type>(OnCreateNewDetailExecute);
-      OpenSingleDetailViewCommand = new DelegateCommand<Type>(OnOpenSingleDetailViewExecute);
-
-      NavigationViewModel = navigationViewModel;
-    }
-
-    public async Task LoadAsync()
-    {
-      await NavigationViewModel.LoadAsync();
-    }
-
-    public ICommand CreateNewDetailCommand { get; }
-
-    public ICommand OpenSingleDetailViewCommand { get; }
-
-    public INavigationViewModel NavigationViewModel { get; }
-
-    public ObservableCollection<IDetailViewModel> DetailViewModels { get; }
-
-    public IDetailViewModel SelectedDetailViewModel
-    {
-      get { return _selectedDetailViewModel; }
-      set
-      {
-        _selectedDetailViewModel = value;
-        OnPropertyChanged();
-      }
-    }
-
-    private async void OnOpenDetailView(OpenDetailViewEventArgs args)
-    {
-      var detailViewModel = DetailViewModels
-        .SingleOrDefault(vm => vm.Id == args.Id
-        && vm.GetType().Name == args.ViewModelName);
-
-      if (detailViewModel == null)
-      {
-        detailViewModel = _detailViewModelCreator[args.ViewModelName];
-        try
+        public MainViewModel(INavigationViewModel navigationViewModel,
+          IIndex<string, IDetailViewModel> detailViewModelCreator,
+          IEventAggregator eventAggregator,
+          IMessageDialogService messageDialogService)
         {
-          await detailViewModel.LoadAsync(args.Id);
-        }
-        catch
-        {
-          await _messageDialogService.ShowInfoDialogAsync("Could not load the entity, " +
-              "maybe it was deleted in the meantime by another user. " +
-              "The navigation is refreshed for you.");
-          await NavigationViewModel.LoadAsync();
-          return;
+            _detailViewModelCreator = detailViewModelCreator;
+            _messageDialogService = messageDialogService;
+
+            DetailViewModels = new ObservableCollection<IDetailViewModel>();
+
+            eventAggregator.GetEvent<OpenDetailViewEvent>().Subscribe(OnOpenDetailView);
+            eventAggregator.GetEvent<AfterDetailDeletedEvent>().Subscribe(AfterDetailDeleted);
+            eventAggregator.GetEvent<AfterDetailClosedEvent>().Subscribe(AfterDetailClosed);
+
+            CreateNewDetailCommand = new DelegateCommand<Type>(OnCreateNewDetailExecute);
+            OpenSingleDetailViewCommand = new DelegateCommand<Type>(OnOpenSingleDetailViewExecute);
+
+            NavigationViewModel = navigationViewModel;
         }
 
-        DetailViewModels.Add(detailViewModel);
-      }
-
-      SelectedDetailViewModel = detailViewModel;
-    }
-
-    private int nextNewItemId = 0;
-    private void OnCreateNewDetailExecute(Type viewModelType)
-    {
-      OnOpenDetailView(
-        new OpenDetailViewEventArgs
+        public async Task LoadAsync()
         {
-          Id = nextNewItemId--,
-          ViewModelName = viewModelType.Name
-        });
-    }
+            await NavigationViewModel.LoadAsync();
+        }
 
-    private void OnOpenSingleDetailViewExecute(Type viewModelType)
-    {
-      OnOpenDetailView(
-     new OpenDetailViewEventArgs
-     {
-       Id = -1,
-       ViewModelName = viewModelType.Name
-     });
-    }
+        public ICommand CreateNewDetailCommand { get; }
 
-    private void AfterDetailDeleted(AfterDetailDeletedEventArgs args)
-    {
-      RemoveDetailViewModel(args.Id, args.ViewModelName);
-    }
+        public ICommand OpenSingleDetailViewCommand { get; }
 
-    private void AfterDetailClosed(AfterDetailClosedEventArgs args)
-    {
-      RemoveDetailViewModel(args.Id, args.ViewModelName);
-    }
+        public INavigationViewModel NavigationViewModel { get; }
 
-    private void RemoveDetailViewModel(int id, string viewModelName)
-    {
-      var detailViewModel = DetailViewModels
-             .SingleOrDefault(vm => vm.Id == id
-             && vm.GetType().Name == viewModelName);
-      if (detailViewModel != null)
-      {
-        DetailViewModels.Remove(detailViewModel);
-      }
+        public ObservableCollection<IDetailViewModel> DetailViewModels { get; }
+
+        public IDetailViewModel SelectedDetailViewModel
+        {
+            get => _selectedDetailViewModel;
+            set
+            {
+                _selectedDetailViewModel = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private async void OnOpenDetailView(OpenDetailViewEventArgs args)
+        {
+            IDetailViewModel detailViewModel = DetailViewModels
+              .SingleOrDefault(vm => vm.Id == args.Id
+              && vm.GetType().Name == args.ViewModelName);
+
+            if (detailViewModel == null)
+            {
+                detailViewModel = _detailViewModelCreator[args.ViewModelName];
+
+                try
+                {
+                    await detailViewModel.LoadAsync(args.Id);
+                }
+                catch
+                {
+                    await _messageDialogService.ShowInfoDialogAsync("Could not load the entity, " +
+                        "maybe it was deleted in the meantime by another user. " +
+                        "The navigation is refreshed for you.");
+                    await NavigationViewModel.LoadAsync();
+                    return;
+                }
+
+                DetailViewModels.Add(detailViewModel);
+            }
+
+            SelectedDetailViewModel = detailViewModel;
+        }
+
+        private int _nextNewItemId;
+        private void OnCreateNewDetailExecute(Type viewModelType)
+        {
+            OnOpenDetailView(
+              new OpenDetailViewEventArgs
+              {
+                  Id = _nextNewItemId--,
+                  ViewModelName = viewModelType.Name
+              });
+        }
+
+        private void OnOpenSingleDetailViewExecute(Type viewModelType)
+        {
+            OnOpenDetailView(
+            new OpenDetailViewEventArgs
+            {
+               Id = -1,
+               ViewModelName = viewModelType.Name
+            });
+        }
+
+        private void AfterDetailDeleted(AfterDetailDeletedEventArgs args)
+        {
+            RemoveDetailViewModel(args.Id, args.ViewModelName);
+        }
+
+        private void AfterDetailClosed(AfterDetailClosedEventArgs args)
+        {
+            RemoveDetailViewModel(args.Id, args.ViewModelName);
+        }
+
+        private void RemoveDetailViewModel(int id, string viewModelName)
+        {
+            IDetailViewModel detailViewModel = DetailViewModels
+                   .SingleOrDefault(vm => vm.Id == id
+                   && vm.GetType().Name == viewModelName);
+
+            if (detailViewModel != null)
+            {
+                DetailViewModels.Remove(detailViewModel);
+            }
+        }
     }
-  }
 }

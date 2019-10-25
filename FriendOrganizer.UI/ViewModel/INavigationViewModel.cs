@@ -2,8 +2,8 @@
 
 namespace FriendOrganizer.UI.ViewModel
 {
-  public interface INavigationViewModel
-  {
-    Task LoadAsync();
-  }
+    public interface INavigationViewModel
+    {
+        Task LoadAsync();
+    }
 }

@@ -11,7 +11,7 @@ namespace FriendOrganizer.UI.View.Services
 
         public async Task<MessageDialogResult> ShowOkCancelDialogAsync(string text, string title)
         {
-            var result = await MetroWindow.ShowMessageAsync(title, text, MessageDialogStyle.AffirmativeAndNegative);
+            MahApps.Metro.Controls.Dialogs.MessageDialogResult result = await MetroWindow.ShowMessageAsync(title, text, MessageDialogStyle.AffirmativeAndNegative);
 
             return result == MahApps.Metro.Controls.Dialogs.MessageDialogResult.Affirmative
               ? MessageDialogResult.OK

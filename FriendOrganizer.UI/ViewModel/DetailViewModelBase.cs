@@ -105,7 +105,7 @@ namespace FriendOrganizer.UI.ViewModel
         {
             if (HasChanges)
             {
-                var result = await MessageDialogService.ShowOkCancelDialogAsync(
+                MessageDialogResult result = await MessageDialogService.ShowOkCancelDialogAsync(
                   "You've made changes. Close this item?", "Question");
                 if (result == MessageDialogResult.Cancel)
                 {
@@ -121,16 +121,16 @@ namespace FriendOrganizer.UI.ViewModel
               });
         }
 
-        protected async Task SaveWithOptimisticConcurrencyAsync(Func<Task> saveFunc,
-          Action afterSaveAction)
+        protected async Task SaveWithOptimisticConcurrencyAsync(Func<Task> saveFunc, Action afterSaveAction)
         {
             try
             {
                 await saveFunc();
             }
-            catch (DbUpdateConcurrencyException ex)
+            catch (DbUpdateConcurrencyException exception)
             {
-                var databaseValues = ex.Entries.Single().GetDatabaseValues();
+                DbPropertyValues databaseValues = exception.Entries.Single().GetDatabaseValues();
+
                 if (databaseValues == null)
                 {
                     await MessageDialogService.ShowInfoDialogAsync("The entity has been deleted by another user");
@@ -138,27 +138,26 @@ namespace FriendOrganizer.UI.ViewModel
                     return;
                 }
 
-                var result = await MessageDialogService.ShowOkCancelDialogAsync("The entity has been changed in "
+                MessageDialogResult result = await MessageDialogService.ShowOkCancelDialogAsync("The entity has been changed in "
                  + "the meantime by someone else. Click OK to save your changes anyway, click Cancel "
                  + "to reload the entity from the database.", "Question");
 
                 if (result == MessageDialogResult.OK)
                 {
                     // Update the original values with database-values
-                    var entry = ex.Entries.Single();
+                    DbEntityEntry entry = exception.Entries.Single();
                     entry.OriginalValues.SetValues(entry.GetDatabaseValues());
                     await saveFunc();
                 }
                 else
                 {
                     // Reload entity from database
-                    await ex.Entries.Single().ReloadAsync();
+                    await exception.Entries.Single().ReloadAsync();
                     await LoadAsync(Id);
                 }
-            };
+            }
 
             afterSaveAction();
         }
-
     }
 }

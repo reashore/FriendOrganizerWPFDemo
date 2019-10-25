@@ -1,31 +1,28 @@
 ﻿using Autofac;
 using FriendOrganizer.UI.Startup;
-using System;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace FriendOrganizer.UI
 {
-  /// <summary>
-  /// Interaction logic for App.xaml
-  /// </summary>
-  public partial class App : Application
-  {
-    private void Application_Startup(object sender, StartupEventArgs e)
+    public partial class App : Application
     {
-      var bootstrapper = new DependencyInjector();
-      var container = bootstrapper.Configure();
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            DependencyInjector bootstrapper = new DependencyInjector();
+            IContainer container = bootstrapper.Configure();
 
-      var mainWindow = container.Resolve<MainWindow>();
-      mainWindow.Show();
+            MainWindow mainWindow = container.Resolve<MainWindow>();
+            mainWindow.Show();
+        }
+
+        private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            string message = $"Unexpected error occured. Please inform the admin:\r\n {e.Exception.Message}";
+            const string title = "Unexpected error";
+            MessageBox.Show(message, title);
+
+            e.Handled = true;
+        }
     }
-
-    private void Application_DispatcherUnhandledException(object sender, 
-      System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
-    {
-      MessageBox.Show("Unexpected error occured. Please inform the admin."
-        + Environment.NewLine + e.Exception.Message, "Unexpected error");
-
-      e.Handled = true;
-    }
-  }
 }

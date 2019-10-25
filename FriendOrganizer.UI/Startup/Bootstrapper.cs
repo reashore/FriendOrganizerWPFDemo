@@ -12,7 +12,7 @@ namespace FriendOrganizer.UI.Startup
   {
     public IContainer Configure()
     {
-      var builder = new ContainerBuilder();
+      ContainerBuilder builder = new ContainerBuilder();
 
       builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
       builder.RegisterType<FriendOrganizerDbContext>().AsSelf();

@@ -21,7 +21,7 @@ namespace FriendOrganizer.UI.Data.Lookups
 
         public async Task<IEnumerable<LookupItem>> GetFriendLookupAsync()
         {
-            using (var ctx = _contextCreator())
+            using (FriendOrganizerDbContext ctx = _contextCreator())
             {
                 return await ctx.Friends.AsNoTracking()
                   .Select(f =>
@@ -36,7 +36,7 @@ namespace FriendOrganizer.UI.Data.Lookups
 
         public async Task<IEnumerable<LookupItem>> GetProgrammingLanguageLookupAsync()
         {
-            using (var ctx = _contextCreator())
+            using (FriendOrganizerDbContext ctx = _contextCreator())
             {
                 return await ctx.ProgrammingLanguages.AsNoTracking()
                   .Select(f =>
@@ -51,7 +51,7 @@ namespace FriendOrganizer.UI.Data.Lookups
 
         public async Task<List<LookupItem>> GetMeetingLookupAsync()
         {
-            using (var ctx = _contextCreator())
+            using (FriendOrganizerDbContext ctx = _contextCreator())
             {
                 List<LookupItem> items = await ctx.Meetings.AsNoTracking()
                   .Select(m =>

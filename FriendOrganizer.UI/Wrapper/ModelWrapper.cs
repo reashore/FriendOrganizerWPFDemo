@@ -4,64 +4,64 @@ using System.Runtime.CompilerServices;
 
 namespace FriendOrganizer.UI.Wrapper
 {
-  public class ModelWrapper<T> : NotifyDataErrorInfoBase
-  {
-    public ModelWrapper(T model)
+    public class ModelWrapper<T> : NotifyDataErrorInfoBase
     {
-      Model = model;
-    }
-
-    public T Model { get; }
-
-    protected virtual void SetValue<TValue>(TValue value,
-      [CallerMemberName]string propertyName = null)
-    {
-      typeof(T).GetProperty(propertyName).SetValue(Model, value);
-      OnPropertyChanged(propertyName);
-      ValidatePropertyInternal(propertyName,value);
-    }
-
-      protected virtual TValue GetValue<TValue>([CallerMemberName]string propertyName = null)
-    {
-      return (TValue)typeof(T).GetProperty(propertyName).GetValue(Model);
-    }
-
-    private void ValidatePropertyInternal(string propertyName,object currentValue)
-    {
-      ClearErrors(propertyName);
-      
-      ValidateDataAnnotations(propertyName, currentValue);
-      
-      ValidateCustomErrors(propertyName);
-    }
-
-    private void ValidateDataAnnotations(string propertyName, object currentValue)
-    {
-      List<ValidationResult> results = new List<ValidationResult>();
-      var context = new ValidationContext(Model) { MemberName = propertyName };
-      Validator.TryValidateProperty(currentValue, context, results);
-
-      foreach (var result in results)
-      {
-        AddError(propertyName, result.ErrorMessage);
-      }
-    }
-
-    private void ValidateCustomErrors(string propertyName)
-    {
-      IEnumerable<string> errors = ValidateProperty(propertyName);
-      if (errors != null)
-      {
-        foreach (var error in errors)
+        public ModelWrapper(T model)
         {
-          AddError(propertyName, error);
+            Model = model;
         }
-      }
-    }
 
-    protected virtual IEnumerable<string> ValidateProperty(string propertyName)
-    {
-      return null;
+        public T Model { get; }
+
+        protected virtual void SetValue<TValue>(TValue value, [CallerMemberName]string propertyName = null)
+        {
+            typeof(T).GetProperty(propertyName).SetValue(Model, value);
+            OnPropertyChanged(propertyName);
+            ValidatePropertyInternal(propertyName, value);
+        }
+
+        protected virtual TValue GetValue<TValue>([CallerMemberName]string propertyName = null)
+        {
+            return (TValue)typeof(T).GetProperty(propertyName).GetValue(Model);
+        }
+
+        private void ValidatePropertyInternal(string propertyName, object currentValue)
+        {
+            ClearErrors(propertyName);
+
+            ValidateDataAnnotations(propertyName, currentValue);
+
+            ValidateCustomErrors(propertyName);
+        }
+
+        private void ValidateDataAnnotations(string propertyName, object currentValue)
+        {
+            List<ValidationResult> results = new List<ValidationResult>();
+            ValidationContext context = new ValidationContext(Model) { MemberName = propertyName };
+            Validator.TryValidateProperty(currentValue, context, results);
+
+            foreach (ValidationResult result in results)
+            {
+                AddError(propertyName, result.ErrorMessage);
+            }
+        }
+
+        private void ValidateCustomErrors(string propertyName)
+        {
+            IEnumerable<string> errors = ValidateProperty(propertyName);
+
+            if (errors != null)
+            {
+                foreach (string error in errors)
+                {
+                    AddError(propertyName, error);
+                }
+            }
+        }
+
+        protected virtual IEnumerable<string> ValidateProperty(string propertyName)
+        {
+            return null;
+        }
     }
-  }
 }

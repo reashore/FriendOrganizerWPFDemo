@@ -1,6 +1,6 @@
 ﻿namespace FriendOrganizer.UI.ViewModel
 {
-  public interface IMeetingDetailViewModel : IDetailViewModel
-  {
-  }
+    public interface IMeetingDetailViewModel : IDetailViewModel
+    {
+    }
 }

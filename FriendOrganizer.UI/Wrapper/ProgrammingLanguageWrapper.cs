@@ -2,17 +2,18 @@
 
 namespace FriendOrganizer.UI.Wrapper
 {
-  public class ProgrammingLanguageWrapper : ModelWrapper<ProgrammingLanguage>
-  {
-    public ProgrammingLanguageWrapper(ProgrammingLanguage model) : base(model)
+    public class ProgrammingLanguageWrapper : ModelWrapper<ProgrammingLanguage>
     {
-    }
-    public int Id { get { return Model.Id; } }
+        public ProgrammingLanguageWrapper(ProgrammingLanguage model) : base(model)
+        {
+        }
 
-    public string Name
-    {
-      get { return GetValue<string>(); }
-      set { SetValue(value); }
+        public int Id => Model.Id;
+
+        public string Name
+        {
+            get => GetValue<string>();
+            set => SetValue(value);
+        }
     }
-  }
 }
