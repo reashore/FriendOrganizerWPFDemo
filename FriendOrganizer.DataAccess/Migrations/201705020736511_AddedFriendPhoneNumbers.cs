@@ -17,7 +17,6 @@ namespace FriendOrganizer.DataAccess.Migrations
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Friend", t => t.FriendId, cascadeDelete: true)
                 .Index(t => t.FriendId);
-            
         }
         
         public override void Down()

@@ -16,7 +16,6 @@ namespace FriendOrganizer.DataAccess.Migrations
                         Email = c.String(maxLength: 50),
                     })
                 .PrimaryKey(t => t.Id);
-            
         }
         
         public override void Down()

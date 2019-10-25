@@ -2,12 +2,12 @@
 
 namespace FriendOrganizer.UI.Event
 {
-  public class AfterCollectionSavedEvent : PubSubEvent<AfterCollectionSavedEventArgs>
-  {
-  }
+    public class AfterCollectionSavedEvent : PubSubEvent<AfterCollectionSavedEventArgs>
+    {
+    }
 
-  public class AfterCollectionSavedEventArgs
-  {
-    public string ViewModelName { get; set; }
-  }
+    public class AfterCollectionSavedEventArgs
+    {
+        public string ViewModelName { get; set; }
+    }
 }

@@ -12,8 +12,8 @@ namespace FriendOrganizer.UI
   {
     private void Application_Startup(object sender, StartupEventArgs e)
     {
-      var bootstrapper = new Bootstrapper();
-      var container = bootstrapper.Bootstrap();
+      var bootstrapper = new DependencyInjector();
+      var container = bootstrapper.Configure();
 
       var mainWindow = container.Resolve<MainWindow>();
       mainWindow.Show();
